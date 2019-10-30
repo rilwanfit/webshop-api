@@ -36,8 +36,7 @@ class ProductListing
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"product_listing:read"})
-     * @Groups({"product_listing:write"})
+     * @Groups({"product_listing:read", "product_listing:write", "user:read"})
      * @Assert\NotBlank()
      * @Assert\Length(
      *     min=2,
@@ -49,7 +48,7 @@ class ProductListing
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"product_listing:read"})
+     * @Groups({"product_listing:read", "user:read"})
      * @Groups({"product_listing:write"})
      * @Assert\NotBlank()
      */
@@ -58,7 +57,7 @@ class ProductListing
     /**
      * @ORM\Column(type="integer")
      * @Groups({"product_listing:read"})
-     * @Groups({"product_listing:write"})
+     * @Groups({"product_listing:write", "user:read"})
      * @Assert\NotBlank()
      */
     private $price;
