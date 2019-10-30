@@ -5,12 +5,15 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
  *     collectionOperations={"get", "post"},
  *     itemOperations={"get", "put", "delete"},
- *     shortName="products"
+ *     shortName="products",
+ *     normalizationContext={"groups"={"product_listing:read"}, "swagger_definition_name"="Read"},
+ *     denormalizationContext={"groups"={"product_listing:write"}}
  * )
  * @ORM\Entity(repositoryClass="App\Repository\ProductListingRepository")
  */
@@ -25,16 +28,22 @@ class ProductListing
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"product_listing:read"})
+     * @Groups({"product_listing:write"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups({"product_listing:read"})
+     * @Groups({"product_listing:write"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"product_listing:read"})
+     * @Groups({"product_listing:write"})
      */
     private $price;
 
@@ -46,7 +55,7 @@ class ProductListing
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isPublished;
+    private $isPublished = false;
 
     public function __construct()
     {
@@ -99,6 +108,11 @@ class ProductListing
         return $this->createdAt;
     }
 
+    /**
+     * How long ago in text that this cheese listing was added.
+     *
+     * @Groups({"product_listing:read"})
+     */
     public function getCreatedAtAgo(): string
     {
         return Carbon::instance($this->createdAt)->diffForHumans();
