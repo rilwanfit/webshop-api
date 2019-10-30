@@ -73,6 +73,13 @@ class ProductListing
      */
     private $isPublished = false;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="productListings")
+     * @ORM\JoinColumn(nullable=false)
+     * @Groups({"product_listing:write", "product_listing:read"})
+     */
+    private $owner;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
@@ -142,6 +149,18 @@ class ProductListing
     public function setIsPublished(bool $isPublished): self
     {
         $this->isPublished = $isPublished;
+
+        return $this;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(?User $owner): self
+    {
+        $this->owner = $owner;
 
         return $this;
     }

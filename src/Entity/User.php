@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -53,6 +55,17 @@ class User implements UserInterface
      * @Assert\NotBlank()
      */
     private $username;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ProductListing", mappedBy="owner")
+     * @Groups({"user:read"})
+     */
+    private $productListings;
+
+    public function __construct()
+    {
+        $this->productListings = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -135,6 +148,37 @@ class User implements UserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ProductListing[]
+     */
+    public function getProductListings(): Collection
+    {
+        return $this->productListings;
+    }
+
+    public function addProductListing(ProductListing $productListing): self
+    {
+        if (!$this->productListings->contains($productListing)) {
+            $this->productListings[] = $productListing;
+            $productListing->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductListing(ProductListing $productListing): self
+    {
+        if ($this->productListings->contains($productListing)) {
+            $this->productListings->removeElement($productListing);
+            // set the owning side to null (unless already changed)
+            if ($productListing->getOwner() === $this) {
+                $productListing->setOwner(null);
+            }
+        }
 
         return $this;
     }
