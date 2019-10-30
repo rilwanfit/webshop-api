@@ -10,6 +10,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
@@ -37,6 +38,12 @@ class ProductListing
      * @ORM\Column(type="string", length=255)
      * @Groups({"product_listing:read"})
      * @Groups({"product_listing:write"})
+     * @Assert\NotBlank()
+     * @Assert\Length(
+     *     min=2,
+     *     max=50,
+     *     maxMessage="Describe your cheese in 50 chars or less"
+     * )
      */
     private $title;
 
@@ -44,6 +51,7 @@ class ProductListing
      * @ORM\Column(type="text")
      * @Groups({"product_listing:read"})
      * @Groups({"product_listing:write"})
+     * @Assert\NotBlank()
      */
     private $description;
 
@@ -51,6 +59,7 @@ class ProductListing
      * @ORM\Column(type="integer")
      * @Groups({"product_listing:read"})
      * @Groups({"product_listing:write"})
+     * @Assert\NotBlank()
      */
     private $price;
 
