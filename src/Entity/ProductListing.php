@@ -2,10 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 
 /**
  * @ApiResource(
@@ -15,6 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     normalizationContext={"groups"={"product_listing:read"}, "swagger_definition_name"="Read"},
  *     denormalizationContext={"groups"={"product_listing:write"}}
  * )
+ * @ApiFilter(BooleanFilter::class, properties={"isPublished"})
+ * @ApiFilter(SearchFilter::class, properties={"title": "partial"})
+ * @ApiFilter(PropertyFilter::class)
  * @ORM\Entity(repositoryClass="App\Repository\ProductListingRepository")
  */
 class ProductListing
