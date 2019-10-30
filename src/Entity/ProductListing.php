@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Carbon\Carbon;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -96,6 +97,11 @@ class ProductListing
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
+    }
+
+    public function getCreatedAtAgo(): string
+    {
+        return Carbon::instance($this->createdAt)->diffForHumans();
     }
 
     public function getIsPublished(): ?bool
